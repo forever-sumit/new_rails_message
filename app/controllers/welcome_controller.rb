@@ -32,7 +32,8 @@ class WelcomeController < ApplicationController
       redirect_to enter_passcode_path(uuid: @contact.uuid) unless session[:is_visited]
     end
 
-    def get_contact
-      @contact = Contact.find_by_uuid(params[:uuid])
+    def get_contact                                
+      uuid = params[:u] || params[:uuid]
+      @contact = Contact.find_by_uuid(uuid)
     end
 end

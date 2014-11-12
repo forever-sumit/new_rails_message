@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class Contact < ActiveRecord::Base
   has_attached_file :qr_code
   validates_attachment :qr_code, content_type: { content_type: /\Aimage\/.*\Z/ }
@@ -39,10 +41,10 @@ class Contact < ActiveRecord::Base
   end
 
   def regenerate_data()
-    self.passcode = Devise.friendly_token.first(8)
-    self.attempt_count = 0
-    self.is_invalid = false
-    self.save
+    #self.passcode = Devise.friendly_token.first(8)
+    #self.attempt_count = 0
+    #self.is_invalid = false
+    #self.save
   end
 
   rails_admin do
@@ -64,22 +66,38 @@ class Contact < ActiveRecord::Base
   private
 
     def create_other_attributes
-      self.uuid = UUIDTools::UUID.random_create.to_s
-      self.passcode = Devise.friendly_token.first(8)
+      #self.uuid = UUIDTools::UUID.random_create.to_s
+      self.uuid = SecureRandom.urlsafe_base64(6)
+      self.passcode = Devise.friendly_token.first(6)
     end
 
     def generate_qrcode
-      qr = RQRCode::QRCode.new( self.uuid, :size => 10, :level => :l )
-      png = qr.to_img
-      file_name = Rails.root.to_s + "/public/" + SecureRandom.hex(32) + ".png"
-      png.resize(90, 90).save(file_name)
-      file = File.open(file_name)
+      #qr = RQRCode::QRCode.new( self.uuid, :size => 10, :level => :l )
+      #png = qr.to_img
+      #file_name = Rails.root.to_s + "/public/" + SecureRandom.hex(32) + ".png"
+      #png.resize(90, 90).save(file_name)
+      #file = File.open(file_name)
+      #self.qr_code = file                                                    
+      
+      file_name = Rails.root.to_s + "/public/" + SecureRandom.hex(32) + ".png"      
+      open(image_url(self.uuid)) {|f|
+        File.open(file_name, "wb") do |file|
+          file.puts f.read          
+        end         
+      }     
+      file = File.open(file_name) 
       self.qr_code = file
     end
 
+    def image_url(code)
+      path = "http://qrickit.com/api/qr?d=#{code}&addtext=SERIAL+NUMBER:%20+00000001&txtcolor=000000&fgdcolor=000000&bgdcolor=ffffff&qrsize=300&t=p&e=m" 
+      puts "Image URL: #{path}"
+      return path
+    end
+
     def delete_temp_qrcode
-      file_name = Rails.root.to_s + "/public/" + self.qr_code.original_filename
-      File.delete(file_name)
+      #file_name = Rails.root.to_s + "/public/" + self.qr_code.original_filename
+      #File.delete(file_name)
     end
 
     def make_code_invalid

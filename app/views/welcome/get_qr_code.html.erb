@@ -1,7 +1,23 @@
-<center>
-  <div class=""></div>
-  <h3>Congratulations!!</h3>
-  <h4>(How to use the QR code)</h4>
-  <%= image_tag @contact.qr_code.url %>
-</center>
+<img src="<%= image_path('logo.png') %>" alt="CCB (Asia)" width="auto" height="20"/>
+<img src="<%= image_path('kv.jpg') %>" class="img-responsive" alt="CCB (Asia)" />
+<p style="color: #000; font-size: 12px">
+	<span>
+		<strong>
+			Pacific Coffee 8安士細杯裝手調飲品電子現金券<br/>
+			Pacific Coffee 8oz Short Size Handcrafted Beverages eCoupon
+		</strong>
+	</span>
+	<center style="margin-top: 0px; z-index: -1">
+		<img src="<%= @contact.qr_code.url %>" class="img-responsive" />
+	  <%#= image_tag @contact.qr_code.url %>
+	</center>
+</p>
 
+<center>
+	<p style="font-size: 12px">
+		請儲存此螢幕截圖以方便日後使用此電子現金券。<br/>
+		To use this eCoupon at ease in the future, you are suggested to save this screenshot.
+	</p>
+</center>
+<br/><br/>
+<%= render 'terms_and_conditions' %>

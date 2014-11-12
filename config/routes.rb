@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   post :check_passcode, to: 'welcome#check_passcode'
   get :get_qr_code, to: 'welcome#get_qr_code'
 
+  get :ep, to: 'welcome#enter_passcode'
+  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

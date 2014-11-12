@@ -1,22 +1,42 @@
-<% if @contact.is_valid_url? %>
-  <p> Please enter the pass code to get the QR Code. <i>(A simple lead-in and instruction)</i> </p>
+<img src="<%= image_path('logo.png') %>" alt="CCB (Asia)" width="auto" height="20"/>
+<img src="<%= image_path('kv.jpg') %>" class="img-responsive" alt="CCB (Asia)" />
+<% if @contact.is_valid_url? %>	
+	<p style="font-size: 11px">
+		感謝您過往對我們「網上銀行」服務的支持及使用。<br/>
+		為表衷心的答謝，我們現奉上<strong style="color: #000">Pacific Coffee 8安士細杯裝手調飲品電子現金券</strong>，請悅納。
+	</p>
+   
+	<p style="font-size: 10px">
+	 Thank you for your continued support on using our Online Banking services.<br/>
+	 We are pleased to offer you, our valuable customer, <strong style="color: #000">a Pacific Coffee 8oz Short Size Handcrafted Beverages eCoupon</strong> to show our sincere appreciation. Hope you will enjoy it.<br/>
+	</p>	
+	                                                                                       
+	<p style="font-size: 10px">
+		<strong style="color: #180090; font-size: 10px">請輸入經短訊接收的6位數字驗證碼以獲取電子現金券。</strong><br/>
+	 	<strong style="color: #180090; font-size: 10px">Please enter 6 digit passcode received via SMS to get the eCoupon.</strong>
+	</p>	
+  <!--<p> Please enter the pass code to get the QR Code. <i>(A simple lead-in and instruction)</i> </p>-->
 
   <%= form_tag check_passcode_path, class: 'form-horizontal', id: 'check-form' do %>
-    <center>
+    <center style="margin: 0 10px 0 10px">
+			<div class="row">
+	      <div class="form-group col-md-6">
+	        <%= hidden_field_tag :uuid, @contact.uuid %>
+	        <%= text_field_tag :passcode, "", placeholder: "", class: "form-control1" %>
+	      </div>
+			</div>
       <div class="form-group">
-        <%= hidden_field_tag :uuid, @contact.uuid %>
-        <%= text_field_tag :passcode, "", placeholder: "123abc (a passcode combined by letter and number)", class: "form-control" %>
-      </div>
-      <div class="form-group">
-        <%= submit_tag :Enter, class: 'btn btn-primary' %>
+        <%= submit_tag "確認\nEnter", class: 'btn btn-primary' %>
       </div>
     </center>
   <% end %>
 <% else %>
-  <center>
+  <center style="margin: 0 10px 0 10px">
     <h4>You have 10 invalid attempts. This url is no longer valid for you.</h4>
   </center>
 <% end %>
+                                      
+	<%= render 'terms_and_conditions' %>
 
 <script>
    $(function() {
@@ -40,5 +60,4 @@
     });
 
   });
-
 </script>
