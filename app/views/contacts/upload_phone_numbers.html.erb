@@ -1,0 +1,19 @@
+<%= form_tag import_contact_path, multipart: true, class: "form-horizontal denser" do %>
+    <fieldset>
+      <div id="contact_file_field" class="control-group file_type file_field ">
+        <label for="contact_contacts" class="control-label">Select File</label>
+        <div class="controls">
+          <%= file_field_tag :contacts, :accept => "text/csv" %>
+          <p class="help-block">Only CSV or Text File allow.</p>
+        </div>
+      </div>
+    </fieldset>
+    <div class="form-actions">
+      <%= button_tag(type: "submit", class: "btn btn-primary") do %>
+        <i class="icon-white icon-ok"></i> Import
+      <% end %>
+      <span class="extra_buttons">
+        <%= link_to '<i class="icon-remove"></i>Cancel'.html_safe, "/admin/contact", class: "btn" %>
+      </span>
+    </div>
+<% end %>

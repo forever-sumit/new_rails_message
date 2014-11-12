@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  phone_no: MyString
+  uuid: MyString
+  passcode: MyString
+  qr_code: 
+  is_invalid: false
+  attempt_count: 1
+  sent_at: 2014-11-06 18:08:52
+
+two:
+  phone_no: MyString
+  uuid: MyString
+  passcode: MyString
+  qr_code: 
+  is_invalid: false
+  attempt_count: 1
+  sent_at: 2014-11-06 18:08:52
