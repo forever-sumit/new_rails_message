@@ -4,7 +4,7 @@ class Contact < ActiveRecord::Base
   has_attached_file :qr_code
   validates_attachment :qr_code, content_type: { content_type: /\Aimage\/.*\Z/ }
 
-  validates_presence_of :phone_no
+  validates_presence_of :phone_no, :serial_number, :bar_code
   before_create :validate_phone, if: "!phone_no.blank?"
   before_create :create_other_attributes
   before_create :generate_qrcode
@@ -12,17 +12,16 @@ class Contact < ActiveRecord::Base
   before_update :make_code_invalid
 
   def self.upload_csv(csv_data)
-    CSV.foreach(csv_data.path, :headers => false) do |row|
-      row.compact.each do |cdata|
-        self.create(phone_no: cdata.strip)
-      end
+    CSV.foreach(csv_data.path, :headers => true, :header_converters => [:downcase]) do |row|
+      self.create(phone_no: row["mobile number"], serial_number: row["serial number"], bar_code: row["bar code"])
     end
   end
 
   def self.upload_txt(txt_data)
-    file_data = txt_data.read.split(",\n")
-    file_data.each do |data|
-      self.create(phone_no: data.strip)
+    rows = txt_data.read.split("\n")
+    rows.each do |row|
+      data = row.split(",")
+      self.create(phone_no: data[0].strip, bar_code: data[1].strip, serial_number: data[2].strip )
     end
   end
 
@@ -50,6 +49,8 @@ class Contact < ActiveRecord::Base
   rails_admin do
     create do
       field :phone_no
+      field :bar_code
+      field :serial_number
     end
 
     list do
@@ -59,8 +60,6 @@ class Contact < ActiveRecord::Base
       field :qr_code
       field :sent_at
     end
-
-
   end
 
   private
@@ -80,7 +79,7 @@ class Contact < ActiveRecord::Base
       #self.qr_code = file                                                    
       
       file_name = Rails.root.to_s + "/public/" + SecureRandom.hex(32) + ".png"      
-      open(image_url(self.uuid)) {|f|
+      open(image_url(self.uuid, self.serial_number)) {|f|
         File.open(file_name, "wb") do |file|
           file.puts f.read          
         end         
@@ -89,8 +88,8 @@ class Contact < ActiveRecord::Base
       self.qr_code = file
     end
 
-    def image_url(code)
-      path = "http://qrickit.com/api/qr?d=#{code}&addtext=SERIAL+NUMBER:%20+00000001&txtcolor=000000&fgdcolor=000000&bgdcolor=ffffff&qrsize=300&t=p&e=m" 
+    def image_url(code, serial_number)
+      path = "http://qrickit.com/api/qr?d=#{code}&addtext=SERIAL+NUMBER:%20+#{serial_number}&txtcolor=000000&fgdcolor=000000&bgdcolor=ffffff&qrsize=300&t=p&e=m" 
       puts "Image URL: #{path}"
       return path
     end

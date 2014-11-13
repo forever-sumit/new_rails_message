@@ -5,6 +5,7 @@
         <div class="controls">
           <%= file_field_tag :contacts, :accept => "text/csv" %>
           <p class="help-block">Only CSV or Text File allow.</p>
+          <p class="help-block">Download <%= link_to "CSV", sample_file_path(:format => "csv") %> <%= link_to "Text", sample_file_path(:format => "txt") %> Sample file</p>
         </div>
       </div>
     </fieldset>

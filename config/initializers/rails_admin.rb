@@ -3,6 +3,7 @@ RailsAdmin.config do |config|
   require Rails.root.join('lib', 'send_message.rb')
   require Rails.root.join('lib', 'resend_message.rb')
   require Rails.root.join('lib', 'send_messages.rb')
+  require Rails.root.join('lib', 'sample_file.rb')
   ### Popular gems integration
 
   ## == Devise ==
@@ -35,6 +36,7 @@ RailsAdmin.config do |config|
     send_messages
     send_message
     resend_message
+    sample_file
 
     collection :import_contact do
       register_instance_option :link_icon do
